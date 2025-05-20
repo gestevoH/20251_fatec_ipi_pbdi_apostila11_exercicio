@@ -9,4 +9,5 @@
 | Nome completo | RA |
 |:--------------|:---|
 |Gustavo Henrique Sousa Santos|2041382411034|
+|Pedro Alvaro Brandão Pereira|2041382321022|
 
