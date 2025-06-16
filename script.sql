@@ -57,3 +57,32 @@ BEGIN
     INSERT INTO tb_log_operacao (nome_procedimento) VALUES ('sp_exibir_total_pedidos_cliente_inout');
 END;
 $$
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-- 1.5 Adicione um procedimento ao sistema do restaurante. Ele deve
+-- - Receber um parâmetro VARIADIC contendo nomes de pessoas
+-- - Fazer uma inserção na tabela de clientes para cada nome recebido
+-- - Receber um parâmetro de saída que contém o seguinte texto:
+-- “Os clientes: Pedro, Ana, João etc foram cadastrados”
+-- Evidentemente, o resultado deve conter os nomes que de fato foram enviados por meio do
+-- parâmetro VARIADIC.
+CREATE OR REPLACE PROCEDURE sp_cadastrar_varios_clientes(OUT p_mensagem_saida VARCHAR(500), VARIADIC p_nomes_clientes TEXT[])
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_nome_cliente VARCHAR(200);
+    v_nomes_cadastrados TEXT := '';
+BEGIN
+    FOR EACH v_nome_cliente IN ARRAY p_nomes_clientes LOOP
+        INSERT INTO tb_cliente (nome) VALUES (v_nome_cliente);
+        IF v_nomes_cadastrados = '' THEN
+            v_nomes_cadastrados := v_nome_cliente;
+        ELSE
+            v_nomes_cadastrados := v_nomes_cadastrados || ', ' || v_nome_cliente;
+        END IF;
+    END LOOP;
+    p_mensagem_saida := 'Os clientes: ' || v_nomes_cadastrados || ' foram cadastrados.';
+    INSERT INTO tb_log_operacao (nome_procedimento) VALUES ('sp_cadastrar_varios_clientes');
+END;
+$$
+ 
