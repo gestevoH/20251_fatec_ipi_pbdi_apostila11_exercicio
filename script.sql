@@ -24,3 +24,18 @@ BEGIN
     INSERT INTO tb_log_operacao (nome_procedimento) VALUES ('sp_exibir_total_pedidos_cliente');
 END;
 $$
+-----------------------------------------------------------------------------------------------------------------------------------
+-- 1.3 Reescreva o exercício 1.2 de modo que o total de pedidos seja armazenado em uma
+-- variável de saída (OUT).
+
+CREATE OR REPLACE PROCEDURE sp_exibir_total_pedidos_cliente_out(IN p_cod_cliente INT, OUT p_total_pedidos)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    SELECT COUNT(*) FROM tb_pedido
+    WHERE cod_cliente = p_cod_cliente
+    INTO p_total_pedidos;
+    RAISE NOTICE "O cliente % tem % pedidos", p_cod_cliente, v_total_pedidos
+    INSERT INTO tb_log_operacao (nome_procedimento) VALUES ('sp_exibir_total_pedidos_cliente_out');
+END;
+$$
